@@ -1,0 +1,24 @@
+apiVersion: skaffold/v2beta7
+kind: Config
+metadata:
+  name: study--js-microservices-ticketing
+build:
+  local:
+    push: false
+  # Uncomment the commented out lines to run on GCP
+  # googleCloudBuild:
+  #   projectId: study-js-ms-ticketing
+  artifacts:
+    # - image: us.gcr.io/study-js-ms-ticketing/study--auth-js-microservices
+    - image: gtiminskis/study--auth-js-microservices
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: "src/**/.ts"
+            dest: .
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*

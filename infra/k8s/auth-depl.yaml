@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gt-auth
+  template:
+    metadata:
+      labels:
+        app: gt-auth
+    spec:
+      containers:
+        - name: gt-auth
+          image: gtiminskis/study--auth-js-microservices
+          # Switch this up to run on GCP
+          # image: us.gcr.io/study-js-ms-ticketing/study--auth-js-microservices
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-service
+spec:
+  selector:
+    app: gt-auth
+  ports:
+    - name: gt-auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
